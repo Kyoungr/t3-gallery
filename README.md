@@ -4,7 +4,7 @@
 
 - [x] Make it deploy (vercel)
 - [x] Scaffold the project with mock data
-- [] tiddy up build
+- [x] tiddy up build
 - [] Database (Vercel Postgres)
 - [] DB to UI
 - [] Add Auth using Clerk
