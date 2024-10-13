@@ -3,7 +3,8 @@
 # Todo
 
 - [x] Make it deploy (vercel)
-- [] Scaffold the project with mock data
+- [x] Scaffold the project with mock data
+- [] tiddy up build
 - [] Database (Vercel Postgres)
 - [] DB to UI
 - [] Add Auth using Clerk
