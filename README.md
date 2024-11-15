@@ -7,7 +7,7 @@
 - [x] tiddy up build
 - [x] Database (Vercel Postgres)
 - [x] DB to UI
-- [] Add Auth using Clerk
+- [x] Add Auth using Clerk
 - [] Add image upload
 - [] Error Management (with sentry)
 - [] Routing/image page (parallel routes)
