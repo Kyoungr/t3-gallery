@@ -5,8 +5,8 @@
 - [x] Make it deploy (vercel)
 - [x] Scaffold the project with mock data
 - [x] tiddy up build
-- [] Database (Vercel Postgres)
-- [] DB to UI
+- [x] Database (Vercel Postgres)
+- [x] DB to UI
 - [] Add Auth using Clerk
 - [] Add image upload
 - [] Error Management (with sentry)
