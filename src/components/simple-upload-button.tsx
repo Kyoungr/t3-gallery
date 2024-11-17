@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useUploadThing } from "~/utils/uploadthing";
-
+import { toast } from "sonner";
+import { useEffect } from "react";
 // inferred input off useUploadThing
 type Input = Parameters<typeof useUploadThing>;
 
@@ -46,10 +47,41 @@ function UploadIcon() {
   );
 }
 
+function LoadingAnimationSVG() {
+  return (
+    <svg
+      width="24"
+      height="24"
+      stroke="#000"
+      viewBox="0 0 24 24"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="white"
+    >
+      <g className="spinner_V8m1">
+        <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
+      </g>
+    </svg>
+  );
+}
+
 export function SimpleUploadButton() {
   const router = useRouter();
   const { inputProps } = useUploadThingInputProps("imageUploader", {
+    onUploadBegin() {
+      toast(
+        <div className="flex items-center gap-2">
+          <LoadingAnimationSVG />
+          <span className="text-lg">Uploading......</span>
+        </div>,
+        {
+          duration: 100000,
+          id: "upload-begin",
+        },
+      );
+    },
     onClientUploadComplete() {
+      toast.dismiss("upload-begin");
+      toast("Upload Complete");
       router.refresh();
     },
   });
