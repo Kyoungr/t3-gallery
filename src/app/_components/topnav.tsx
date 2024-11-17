@@ -1,7 +1,7 @@
 "use client";
 
 import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
-import { SimpleUploadButton } from "~/components/simple-upload-button";
+import { SimpleUploadButton } from "~/app/_components/simple-upload-button";
 
 export function TopNav() {
   return (
