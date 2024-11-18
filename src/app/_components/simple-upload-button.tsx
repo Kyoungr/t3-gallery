@@ -1,7 +1,8 @@
+"use client";
+
 import { useRouter } from "next/navigation";
 import { useUploadThing } from "~/utils/uploadthing";
 import { toast } from "sonner";
-import { useEffect } from "react";
 import { usePostHog } from "posthog-js/react";
 // inferred input off useUploadThing
 type Input = Parameters<typeof useUploadThing>;
@@ -59,7 +60,7 @@ function LoadingAnimationSVG() {
       fill="white"
     >
       <g className="spinner_V8m1">
-        <circle cx="12" cy="12" r="9.5" fill="none" stroke-width="3"></circle>
+        <circle cx="12" cy="12" r="9.5" fill="none" strokeWidth="3"></circle>
       </g>
     </svg>
   );
@@ -81,6 +82,11 @@ export function SimpleUploadButton() {
           id: "upload-begin",
         },
       );
+    },
+    onUploadError(error) {
+      posthog.capture("upload_error", { error });
+      toast.dismiss("upload-begin");
+      toast.error("Upload failed");
     },
     onClientUploadComplete() {
       toast.dismiss("upload-begin");

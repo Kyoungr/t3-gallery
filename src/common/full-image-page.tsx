@@ -1,11 +1,20 @@
 import { clerkClient } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { redirect, useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
 import { deleteImage, getImage } from "~/server/queries";
 
 export default async function FullPageImageView(props: { id: number }) {
   const image = await getImage(props.id);
+
   const uploaderinfo = await (await clerkClient()).users.getUser(image.userId);
+
+  async function deleteAction() {
+    "use server";
+    await deleteImage(props.id);
+    revalidatePath("/");
+    redirect("/");
+  }
   return (
     <div className="flex h-full w-full min-w-0">
       <div className="flex flex-shrink items-center justify-center">
@@ -27,12 +36,7 @@ export default async function FullPageImageView(props: { id: number }) {
         </div>
 
         <div className="p-2">
-          <form
-            action={async () => {
-              "use server";
-              await deleteImage(props.id);
-            }}
-          >
+          <form action={deleteAction}>
             <Button type="submit" variant="destructive">
               Delete
             </Button>

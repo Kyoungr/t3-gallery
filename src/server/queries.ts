@@ -1,7 +1,7 @@
 import "server-only";
 import { db } from "./db";
 import { auth } from "@clerk/nextjs/server";
-import { redirect } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 import { images } from "./db/schema";
 import { and, eq } from "drizzle-orm/sql";
 import { revalidatePath } from "next/cache";
@@ -32,7 +32,7 @@ export async function getImage(id: number) {
 
 export async function deleteImage(id: number) {
   const user = await auth();
-  if (!user.userId) throw new Error("Unathorized");
+  if (!user.userId) throw new Error("Unauthorized");
   try {
     await db
       .delete(images)
@@ -46,7 +46,8 @@ export async function deleteImage(id: number) {
       },
     });
 
-    redirect("/");
+    revalidatePath("/", "layout");
+    redirect("/", RedirectType.push);
   } catch (error) {
     // Log the error if needed
     console.error("Error deleting image:", error);

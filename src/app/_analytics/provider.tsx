@@ -13,6 +13,9 @@ if (typeof window !== "undefined") {
   });
 }
 export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
+  // Only render PostHog on client side
+  if (typeof window === "undefined") return children;
+
   return (
     <PostHogProvider client={posthog}>
       <PostHogAuthWrapper>{children}</PostHogAuthWrapper>
@@ -21,19 +24,28 @@ export function CSPostHogProvider({ children }: { children: React.ReactNode }) {
 }
 
 function PostHogAuthWrapper({ children }: { children: React.ReactNode }) {
-  const userInfo = useUser();
-  const auth = useAuth();
+  const { user } = useUser();
+  const { isSignedIn } = useAuth();
 
   useEffect(() => {
-    if (userInfo.user) {
-      posthog.identify(userInfo.user.id, {
-        email: userInfo.user.emailAddresses[0]?.emailAddress,
-        name: userInfo.user.fullName,
+    // Only run on client-side
+    if (typeof window === "undefined") return;
+
+    if (user && isSignedIn) {
+      posthog.identify(user.id, {
+        email: user.emailAddresses[0]?.emailAddress,
+        name: user.fullName,
       });
-    } else if (!auth.isSignedIn) {
+    } else {
       posthog.reset();
     }
-  }, [auth]);
+  }, [user, isSignedIn]);
+
+  // Capture pageview after auth state is known
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    posthog.capture("$pageview");
+  }, []);
 
   return children;
 }
